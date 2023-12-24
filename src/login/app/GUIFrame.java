@@ -1,12 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package login.app;
 
 /**
  *
- * @author MAC_WARE
+ * @author MAC_DEE
  */
 public class GUIFrame extends javax.swing.JFrame {
 
