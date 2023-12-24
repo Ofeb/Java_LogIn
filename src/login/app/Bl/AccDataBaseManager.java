@@ -1,13 +1,33 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package login.app.Bl;
 
-/**
- *
- * @author MAC_WARE
+import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+/*
  */
 public class AccDataBaseManager {
+    // connection to data Base
+    // Variables
+
+    Connection connect;
+   
     
+    //connect to drivers
+   //    connect = getConnection("")
+
+    public boolean addUser(Account acc) {
+        if (acc.getFullname().isEmpty() || acc.getPassword().isBlank() || acc.getUsername().isBlank()) {
+            return false;
+        } else {
+            try {
+                PreparedStatement ps = connect.prepareStatement("");
+            } catch (SQLException ex) {
+                Logger.getLogger(AccDataBaseManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            return true;
+        }
+    }
+
 }
