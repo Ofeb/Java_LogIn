@@ -5,7 +5,7 @@ package login.app;
  * @author MAC_DEE
  */
 public class GUIFrame extends javax.swing.JFrame {
-
+ 
     /**
      * Creates new form GUIFrame
      */
