@@ -1,11 +1,19 @@
 package login.app;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import login.app.Bl.AccDataBaseManager;
+import login.app.Bl.Account;
+
 /**
  *
  * @author MAC_DEE
  */
 public class GUIFrame extends javax.swing.JFrame {
- 
+
     /**
      * Creates new form GUIFrame
      */
@@ -20,7 +28,7 @@ public class GUIFrame extends javax.swing.JFrame {
         LogInPnl.setVisible(true);
         SignupPnl2.setVisible(false);
         SignupPnl.setRequestFocusEnabled(true);
-       
+
     }
 
     @SuppressWarnings("unchecked")
@@ -252,8 +260,7 @@ public class GUIFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(14, 14, 14)
-                .addComponent(HomePnl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(HomePnl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -266,8 +273,35 @@ public class GUIFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+
     private void LogInBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogInBtnActionPerformed
         // TODO add your handling code here:
+        try {
+            //variables
+            AccDataBaseManager manager = new AccDataBaseManager();
+            Account account;
+            int isAvailable = 0;
+
+            ArrayList<Account> accountlist = manager.logInDetails();
+
+            String user = UsernameTxtFld.getText();
+            char[] password = PasswordFld.getPassword();
+            for (Account acc : accountlist) {
+                if (acc.getUsername().equals(user) && acc.getPassword().equals(new String(password))) {
+                    JOptionPane.showMessageDialog(rootPane, "LOG IN SUCCESSFUL");
+
+                    isAvailable = 1;
+                }
+
+            }
+
+            if (isAvailable == 0) {
+                JOptionPane.showMessageDialog(rootPane, "Wrong Username or Password,Try again", "Wrong Input", JOptionPane.ERROR_MESSAGE);
+            }
+
+        } catch (SQLException ex) {
+            ex.getStackTrace();
+        }
     }//GEN-LAST:event_LogInBtnActionPerformed
 
     private void UsernameTxtFldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UsernameTxtFldActionPerformed
@@ -277,18 +311,45 @@ public class GUIFrame extends javax.swing.JFrame {
     private void signupLoginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signupLoginBtnActionPerformed
 
         LogInPnl.setVisible(true);
-         SignupPnl2.setVisible(false);
-         
+        SignupPnl2.setVisible(false);
+
     }//GEN-LAST:event_signupLoginBtnActionPerformed
 
     private void signupBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signupBtnActionPerformed
-        // TODO add your handling code here:
+        try {
+            // Variables
+            AccDataBaseManager manager = new AccDataBaseManager();
+            Account account = null;
+            //create an account
+            char[] pwd1 = password1.getPassword();
+            char[] pwd2 = password2.getPassword();
+
+            if ((new String(pwd1).equals(new String(pwd2))) /*&&!(username.getText().isEmpty() && Fullname.getText().isBlank() && new String(pwd1).isEmpty())*/) {
+                account = new Account(username.getText(), Fullname.getText(), new String(pwd1));
+                Boolean isadded = manager.addUser(account);
+                if (isadded) {
+                    JOptionPane.showMessageDialog(rootPane, "Added Successful");
+
+                    //clear all 
+                    clearFillieds();
+                } else {
+                    JOptionPane.showMessageDialog(rootPane, "Not Added");
+                }
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+
     }//GEN-LAST:event_signupBtnActionPerformed
 
     private void SignupLoginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SignupLoginBtnActionPerformed
-        // TODO add your handling code here:
+        // Panel control
         SignupPnl2.setVisible(true);
         LogInPnl.setVisible(false);
+
+
     }//GEN-LAST:event_SignupLoginBtnActionPerformed
 
     private void password1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_password1ActionPerformed
@@ -358,5 +419,14 @@ public class GUIFrame extends javax.swing.JFrame {
     private javax.swing.JButton signupLoginBtn;
     private javax.swing.JTextField username;
     // End of variables declaration//GEN-END:variables
+
+    private void clearFillieds() {
+        username.setText("");
+        Fullname.setText("");
+        password1.setText("");
+        password2.setText("");
+        PasswordFld.setText("");
+        UsernameTxtFld.setText("");
+    }
 
 }
